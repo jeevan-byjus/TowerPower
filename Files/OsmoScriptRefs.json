@@ -1,5 +1,5 @@
 ﻿{
-    "name": "Template-Scripts",
+    "name": "TowerPower-Scripts",
     "references": [
         "sdk-plugins",
         "container-api",

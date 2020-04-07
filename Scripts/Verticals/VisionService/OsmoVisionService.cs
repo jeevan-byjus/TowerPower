@@ -1,14 +1,14 @@
 ﻿using UnityEngine;
 using System;
 using System.Collections.Generic;
-using Byjus.Gamepod.Template.Util;
+using Byjus.Gamepod.TowerPower.Util;
 using UnityEngine.UI;
 
 #if !CC_STANDALONE
 using Osmo.SDK.VisionPlatformModule;
 using Osmo.SDK.Vision;
 
-namespace Byjus.Gamepod.Template.Verticals {
+namespace Byjus.Gamepod.TowerPower.Verticals {
 
     /// <summary>
     /// Implementation of VisionService on iPad Osmo Build

@@ -4,14 +4,14 @@ using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.TestTools;
-using Byjus.Gamepod.Template.Verticals;
-using Byjus.Gamepod.Template.Controllers;
-using Byjus.Gamepod.Template.Views;
-using Byjus.Gamepod.Template.Util;
+using Byjus.Gamepod.TowerPower.Verticals;
+using Byjus.Gamepod.TowerPower.Controllers;
+using Byjus.Gamepod.TowerPower.Views;
+using Byjus.Gamepod.TowerPower.Util;
 using System.IO;
 
 
-namespace Byjus.Gamepod.Template.Tests {
+namespace Byjus.Gamepod.TowerPower.Tests {
     public class UtilTest : BaseTestSuite {
 
         [SetUp]

@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-namespace Byjus.Gamepod.Template.Verticals {
+namespace Byjus.Gamepod.TowerPower.Verticals {
     /// <summary>
     /// This is the interface used by whichever class wants to read Vision Data
     /// Difference is it should mainly work with in-game models and shouldn't use anything platform dependent

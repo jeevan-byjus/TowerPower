@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-namespace Byjus.Gamepod.Template.Util {
+namespace Byjus.Gamepod.TowerPower.Util {
     public class Constants {
         public const float INPUT_DELAY = 0.8f;
         public static float SW_EQUAL_POSITION_DIFF_PERCENT = 0.5f / 100;

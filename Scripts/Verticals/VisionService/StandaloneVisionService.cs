@@ -2,7 +2,7 @@
 using UnityEngine;
 using System.Collections;
 
-namespace Byjus.Gamepod.Template.Verticals {
+namespace Byjus.Gamepod.TowerPower.Verticals {
     /// <summary>
     /// Standalone variant of the Vision Service
     /// Generates random number of blue and red cubes in a range when queried for objects

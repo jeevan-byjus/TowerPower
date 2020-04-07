@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
-using Byjus.Gamepod.Template.Util;
+using Byjus.Gamepod.TowerPower.Util;
 using UnityEngine;
-using Byjus.Gamepod.Template.Externals;
+using Byjus.Gamepod.TowerPower.Externals;
 
 #if !CC_STANDALONE
-namespace Byjus.Gamepod.Template.Verticals {
+namespace Byjus.Gamepod.TowerPower.Verticals {
 
     /// <summary>
     /// Editor implementation of Vision Service

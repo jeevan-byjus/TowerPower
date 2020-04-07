@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
-using Byjus.Gamepod.Template.Util;
+using Byjus.Gamepod.TowerPower.Util;
 
-namespace Byjus.Gamepod.Template.Verticals {
+namespace Byjus.Gamepod.TowerPower.Verticals {
 
     [Serializable]
     public class JOutput {

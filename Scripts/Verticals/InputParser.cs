@@ -1,9 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 using System.Collections;
-using Byjus.Gamepod.Template.Util;
+using Byjus.Gamepod.TowerPower.Util;
 
-namespace Byjus.Gamepod.Template.Verticals {
+namespace Byjus.Gamepod.TowerPower.Verticals {
     public class InputParser : MonoBehaviour {
         public IExtInputListener inputListener;
 

@@ -1,9 +1,9 @@
 ﻿using UnityEngine;
-using Byjus.Gamepod.Template.Controllers;
-using Byjus.Gamepod.Template.Views;
-using Byjus.Gamepod.Template.Verticals;
+using Byjus.Gamepod.TowerPower.Controllers;
+using Byjus.Gamepod.TowerPower.Views;
+using Byjus.Gamepod.TowerPower.Verticals;
 
-namespace Byjus.Gamepod.Template.Externals {
+namespace Byjus.Gamepod.TowerPower.Externals {
     /// <summary>
     /// Since there are controllers (non-monobehaviors) involved, we can't just directly assign references
     /// So, this class is used which manages all reference assigning

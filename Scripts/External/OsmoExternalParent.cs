@@ -1,15 +1,15 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Byjus.Gamepod.Template.Verticals;
-using Byjus.Gamepod.Template.Util;
+using Byjus.Gamepod.TowerPower.Verticals;
+using Byjus.Gamepod.TowerPower.Util;
 
 #if !CC_STANDALONE
 using Osmo.SDK;
 using Osmo.Container.Common;
 using Osmo.SDK.Internal;
 
-namespace Byjus.Gamepod.Template.Externals {
+namespace Byjus.Gamepod.TowerPower.Externals {
 
     /// <summary>
     /// The top most parent in game hierarchy in case the setup is for Osmo
