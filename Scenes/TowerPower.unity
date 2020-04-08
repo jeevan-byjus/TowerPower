@@ -761,13 +761,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 88875829c1fc34de896dc4f3565f207d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  drawStartPoint: {x: -13.5, y: 13.5}
-  tileSize: {x: 3, y: 3}
   landPrefab: {fileID: 2759589341994882583, guid: d5f917d638d1e4d259c55209c3b74632,
     type: 3}
   bentRoadPrefab: {fileID: 946072056921652106, guid: 8707c7220f084497b9edc1b50d827c74,
     type: 3}
   straightRoadPrefab: {fileID: 7794524459194222100, guid: ca645484db35e426f8f74b5a6f8232e0,
+    type: 3}
+  monsterPrefabA: {fileID: 114431682027276548, guid: dbb05e6bcbc974a0d95c221b8071f43b,
+    type: 3}
+  monsterPrefabB: {fileID: 114995773796831646, guid: 6c326f68acc564ea680cd741cf9b4587,
     type: 3}
 --- !u!4 &1957267775
 Transform:
