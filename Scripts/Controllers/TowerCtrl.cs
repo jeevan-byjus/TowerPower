@@ -12,6 +12,8 @@ namespace Byjus.Gamepod.TowerPower.Controllers {
 
         public int Id => mModel.id;
         public TowerType Type => mModel.type;
+        public Vector2Int UnitSize => mModel.unitSize;
+        public Vector2Int UnitPostion => mModel.unitPosition;
 
         public void Init(Tower mModel) {
             this.mModel = mModel;
@@ -72,6 +74,8 @@ namespace Byjus.Gamepod.TowerPower.Controllers {
         void Init(Tower tower);
         int Id { get; }
         TowerType Type { get; }
+        Vector2Int UnitSize { get; }
+        Vector2Int UnitPostion { get; }
         Rect GetRange(Vector2 tileSize);
         void DestroySelf();
     }

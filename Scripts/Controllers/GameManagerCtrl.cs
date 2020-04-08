@@ -179,10 +179,15 @@ namespace Byjus.Gamepod.TowerPower.Controllers {
         }
 
         public void OnTowerAdded(Tower t) {
-            // validate wether this tower can be added, i.e. is there another tower at it's place or maybe it's not a valid path
-            // or maybe allowed capacity for towers or something
-            // also change the position to match the centre of a tile
-            // mark off grid locations to occupied
+            t.unitPosition = GetCellPosForTower(t);
+            if (!ValidateTower(t)) {
+                Debug.LogError("Invalid tower placement");
+                return;
+            }
+
+            t.position = startPoint + new Vector2(t.unitPosition.x * tileSize.x, -t.unitPosition.y * tileSize.y);
+            MarkTowerInCells(t.unitSize, t.unitPosition, true);
+
             view.CreateTower(t, tv => {
                 var ctrl = CreateTowerCtrl(tv);
                 ctrl.Init(t);
@@ -190,12 +195,52 @@ namespace Byjus.Gamepod.TowerPower.Controllers {
             });
         }
 
+        Vector2Int GetCellPosForTower(Tower t) {
+            var topLeftCorner = startPoint + new Vector2(-tileSize.x / 2, tileSize.y / 2);
+            var relPos = new Vector2(t.position.x - topLeftCorner.x, topLeftCorner.y - t.position.y);
+            var cellPos = new Vector2Int(Mathf.FloorToInt(relPos.x / tileSize.x), Mathf.FloorToInt(relPos.y / tileSize.y));
+            return cellPos;
+        }
+
+        bool ValidateTower(Tower t) {
+            var cellPos = t.unitPosition;
+            for (int i = 0; i < t.unitSize.x; i++) {
+                for (int j = 0; j < t.unitSize.y; j++) {
+                    var posX = cellPos.x + i;
+                    var posY = cellPos.y + j;
+
+                    if (!(posX >= 0 && posX < cells[0].Count &&
+                        posY >= 0 && posY < cells.Count &&
+                        cells[posY][posX] == CellType.LAND)) {
+
+                        Debug.LogError("Can't place the tower " + t + ", got cell as: " + cellPos);
+                        return false;
+                    }
+                }
+            }
+
+            return true;
+        }
+
+        void MarkTowerInCells(Vector2Int unitSize, Vector2Int towerPos, bool present) {
+            for (int i = 0; i < unitSize.x; i++) {
+                for (int j = 0; j < unitSize.y; j++) {
+                    var posX = towerPos.x + i;
+                    var posY = towerPos.y + j;
+
+                    cells[posY][posX] = present ? CellType.TOWER : CellType.LAND;
+                }
+            }
+        }
+
         public void OnTowerRemoved(int towerId, TowerType type) {
             var tower = towerCtrls.Find(x => x.Id == towerId && x.Type == type);
             if (tower == null) {
-                throw new System.Exception("No tower to remove of id: " + towerId + ", type: " + type);
+                Debug.LogError("No tower to remove of id: " + towerId + ", type: " + type + "\n" + "Maybe there wasn't space to put the tower");
+                return;
             }
 
+            MarkTowerInCells(tower.UnitSize, tower.UnitPostion, false);
             tower.DestroySelf();
             towerCtrls.Remove(tower);
         }
@@ -243,6 +288,7 @@ namespace Byjus.Gamepod.TowerPower.Controllers {
         BEND_BL,
         BEND_BR,
         ENTRY,
-        EXIT
+        EXIT,
+        TOWER
     }
 }
