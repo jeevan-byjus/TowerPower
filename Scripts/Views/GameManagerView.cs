@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System;
 using System.Collections.Generic;
-using System.Collections;
+using Byjus.Gamepod.TowerPower.Verticals;
 using Byjus.Gamepod.TowerPower.Controllers;
 
 namespace Byjus.Gamepod.TowerPower.Views {
@@ -14,6 +14,10 @@ namespace Byjus.Gamepod.TowerPower.Views {
         [SerializeField] GameObject straightRoadPrefab;
         [SerializeField] MonsterView monsterPrefabA;
         [SerializeField] MonsterView monsterPrefabB;
+
+        [SerializeField] TowerView towerHundredPrefab;
+        [SerializeField] TowerView towerTenPrefab;
+        [SerializeField] TowerView towerOnePrefab;
 
         public void CreateMonster(Monster m, Action<MonsterView> onDone) {
             var mV = Instantiate(m.type == MonsterType.TYPE_A ? monsterPrefabA : monsterPrefabB);
@@ -51,10 +55,24 @@ namespace Byjus.Gamepod.TowerPower.Views {
 
             onDone();
         }
+
+        public void CreateTower(Tower t, Action<TowerView> onDone) {
+            TowerView tV = null;
+            switch (t.type) {
+                case TowerType.HUNDRED: tV = Instantiate(towerHundredPrefab, transform); break;
+                case TowerType.TEN: tV = Instantiate(towerTenPrefab, transform); break;
+                case TowerType.ONE: tV = Instantiate(towerOnePrefab, transform); break;
+            }
+
+            tV.transform.position = t.position;
+
+            onDone(tV);
+        }
     }
 
     public interface IGameManagerView : IBaseView {
         void DrawLevel(List<List<CellType>> cells, Action onDone);
         void CreateMonster(Monster m, Action<MonsterView> onDone);
+        void CreateTower(Tower t, Action<TowerView> onDone);
     }
 }

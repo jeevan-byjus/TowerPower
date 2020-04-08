@@ -4,7 +4,7 @@ using Byjus.Gamepod.TowerPower.Verticals;
 using System.Collections.Generic;
 
 namespace Byjus.Gamepod.TowerPower.Controllers {
-    public class GameManagerCtrl : IGameManagerCtrl, IExtInputListener, IMonsterParent {
+    public class GameManagerCtrl : IGameManagerCtrl, IExtInputListener, IMonsterParent, ITowerParent {
         public IGameManagerView view;
 
         public Vector2 startPoint { get; private set; }
@@ -15,6 +15,7 @@ namespace Byjus.Gamepod.TowerPower.Controllers {
 
         List<List<CellType>> cells;
         List<IMonsterCtrl> monsterCtrls;
+        List<ITowerCtrl> towerCtrls;
 
         public void Init() {
             startPoint = new Vector2(-13.5f, 13.5f);
@@ -44,6 +45,7 @@ namespace Byjus.Gamepod.TowerPower.Controllers {
             gamePath = new List<Vector2>();
             gamePath = ParsePath(cells, new Vector2Int(0, 1), new Vector2Int(9, 8));
 
+            towerCtrls = new List<ITowerCtrl>();
             monsterCtrls = new List<IMonsterCtrl>();
             var monsters = ParseMonsters(monstersS);
             MonsterSpawnLoop(monsters);
@@ -93,7 +95,6 @@ namespace Byjus.Gamepod.TowerPower.Controllers {
 
             Vector2Int curr = entryPos;
             while (curr != exitPos) {
-                Debug.LogError("Adding point: " + curr + ", prev: " + prev);
                 ret.Add(WorldPos(curr));
 
                 int nx = 0, ny = 0;
@@ -110,7 +111,6 @@ namespace Byjus.Gamepod.TowerPower.Controllers {
                         found = true;
                         prev = curr;
                         curr = new Vector2Int(nx, ny);
-                        Debug.LogError("Next point: " + curr);
                         break;
                     }
                 }
@@ -137,14 +137,14 @@ namespace Byjus.Gamepod.TowerPower.Controllers {
         void WaitAndCreateMonster(float time, Monster m) {
             view.Wait(time, () => {
                 view.CreateMonster(m, mv => {
-                    var ctrl = CreateMonsterCtrl(m, mv);
+                    var ctrl = CreateMonsterCtrl(mv);
                     ctrl.Init(m, gamePath);
                     monsterCtrls.Add(ctrl);
                 });
             });
         }
 
-        IMonsterCtrl CreateMonsterCtrl(Monster m, MonsterView mView) {
+        IMonsterCtrl CreateMonsterCtrl(MonsterView mView) {
             var ctrl = new MonsterCtrl();
             mView.ctrl = ctrl;
             ctrl.view = mView;
@@ -152,25 +152,77 @@ namespace Byjus.Gamepod.TowerPower.Controllers {
             return ctrl;
         }
 
+        ITowerCtrl CreateTowerCtrl(TowerView tView) {
+            var ctrl = new TowerCtrl();
+            tView.ctrl = ctrl;
+            ctrl.view = tView;
+            ctrl.parent = this;
+            return ctrl;
+        }
+
+        public void OnMonsterEndOfPath(IMonsterCtrl m) {
+            // reduce HP if any
+            DestroyMonster(m);
+        }
+
+        void DestroyMonster(IMonsterCtrl m) {
+            if (monsterCtrls.Contains(m)) {
+                monsterCtrls.Remove(m);
+            } else {
+                throw new System.Exception("Trying to remove invalid monster on completion of path");
+            }
+            m.Destroy();
+        }
+
         public void OnInputStart() {
-            //throw new System.NotImplementedException();
+
+        }
+
+        public void OnTowerAdded(Tower t) {
+            // validate wether this tower can be added, i.e. is there another tower at it's place or maybe it's not a valid path
+            // or maybe allowed capacity for towers or something
+            // also change the position to match the centre of a tile
+            // mark off grid locations to occupied
+            view.CreateTower(t, tv => {
+                var ctrl = CreateTowerCtrl(tv);
+                ctrl.Init(t);
+                towerCtrls.Add(ctrl);
+            });
+        }
+
+        public void OnTowerRemoved(int towerId, TowerType type) {
+            var tower = towerCtrls.Find(x => x.Id == towerId && x.Type == type);
+            if (tower == null) {
+                throw new System.Exception("No tower to remove of id: " + towerId + ", type: " + type);
+            }
+
+            tower.DestroySelf();
+            towerCtrls.Remove(tower);
         }
 
         public void OnInputEnd() {
-            //throw new System.NotImplementedException();
+
         }
 
-        public void OnBlueCubeAdded() {
-            //throw new System.NotImplementedException();
+        public void OnMonsterDestroyed(IMonsterCtrl m) {
+            // destroyed by user, give points maybe
+            DestroyMonster(m);
         }
 
-        public void OnRedCubeAdded() {
-            //throw new System.NotImplementedException();
-        }
+        public List<ITowerTarget> GetInRangeTargetsForTower(ITowerCtrl towerCtrl) {
+            // find targets in this range.. how?
+            // ask the tower for dimensions
+            // get monster's current positions and determine if it is inside this range
+            var rect = towerCtrl.GetRange(tileSize);
+            var targets = new List<ITowerTarget>();
+            foreach (var monster in monsterCtrls) {
+                var target = (ITowerTarget) monster;
+                if (rect.Contains(target.GetCurrentPosition())) {
+                    targets.Add(target);
+                }
+            }
 
-        public void OnEndOfPath(IMonsterCtrl m) {
-            // reduce HP or anything else
-            m.Destroy();
+            return targets;
         }
     }
 

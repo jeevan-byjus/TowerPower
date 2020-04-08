@@ -3,35 +3,57 @@ using Byjus.Gamepod.TowerPower.Views;
 using UnityEngine;
 
 namespace Byjus.Gamepod.TowerPower.Controllers {
-    public class MonsterCtrl : IMonsterCtrl {
+    public class MonsterCtrl : IMonsterCtrl, ITowerTarget {
         public IMonsterView view;
         public IMonsterParent parent;
 
         Monster mModel;
         List<Vector2> mPath;
+        int currPathInd;
 
         public void Init(Monster mModel, List<Vector2> path) {
             this.mModel = mModel;
             this.mPath = path;
 
-            MoveOnPath(0);
+            currPathInd = 0;
+            MoveOnPath();
         }
 
         public void Destroy() {
             view.DestroySelf();
         }
 
-        void MoveOnPath(int ind) {
-            if (ind == mPath.Count) {
-                parent.OnEndOfPath(this);
+        void MoveOnPath() {
+            if (currPathInd == mPath.Count) {
+                parent.OnMonsterEndOfPath(this);
                 return;
             }
 
-            view.MoveTo(mPath[ind], () => {
-                view.Wait(0.5f, () => {
-                    MoveOnPath(ind + 1);
+            view.MoveTo(mPath[currPathInd], () => {
+                view.Wait(2.0f, () => {
+                    currPathInd++;
+                    MoveOnPath();
                 });
             });
+        }
+
+        public void TakeDamage(float damage) {
+            mModel.value -= damage;
+
+            if (mModel.value <= 0) {
+                parent.OnMonsterDestroyed(this);
+            }
+        }
+
+        public float GetDistanceCovered() {
+            return currPathInd;
+        }
+
+        public Vector3 GetCurrentPosition() {
+            if (currPathInd == mPath.Count) {
+                throw new System.Exception("Monster finished path before targetting");
+            }
+            return mPath[currPathInd];
         }
     }
 
@@ -41,13 +63,14 @@ namespace Byjus.Gamepod.TowerPower.Controllers {
     }
 
     public interface IMonsterParent {
-        void OnEndOfPath(IMonsterCtrl m);
+        void OnMonsterEndOfPath(IMonsterCtrl m);
+        void OnMonsterDestroyed(IMonsterCtrl m);
     }
 
     public class Monster {
         public int id;
         public MonsterType type;
-        public int value;
+        public float value;
     }
 
     public enum MonsterType {

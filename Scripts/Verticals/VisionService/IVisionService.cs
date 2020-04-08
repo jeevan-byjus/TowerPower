@@ -9,26 +9,32 @@ namespace Byjus.Gamepod.TowerPower.Verticals {
     /// </summary>
     public interface IVisionService {
         void Init();
-        List<ExtInput> GetVisionObjects();
+        List<Tower> GetVisionObjects();
     }
 
-    public enum TileType { RED_CUBE, BLUE_ROD }
+    public enum TowerType { HUNDRED, TEN, ONE }
 
-    public class ExtInput {
-        public TileType type;
+    public class Tower {
+        public TowerType type;
         public int id;
         public Vector2 position;
+        public Vector2Int unitSize;
+        public int unitRange;
+        public float timeBetweenShots;
+        public float damage;
 
-        public ExtInput() { }
+        public Tower() {
 
-        public ExtInput(TileType type, int id, Vector2 position) {
-            this.type = type;
-            this.id = id;
-            this.position = position;
         }
 
-        public override string ToString() {
-            return id + ", " + type + ", (" + position.x + ", " + position.y + ")";
+        public Tower(Tower other) {
+            type = other.type;
+            id = other.id;
+            position = other.position;
+            unitSize = other.unitSize;
+            unitRange = other.unitRange;
+            timeBetweenShots = other.timeBetweenShots;
+            damage = other.damage;
         }
     }
 }

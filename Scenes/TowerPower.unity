@@ -771,6 +771,12 @@ MonoBehaviour:
     type: 3}
   monsterPrefabB: {fileID: 114995773796831646, guid: 6c326f68acc564ea680cd741cf9b4587,
     type: 3}
+  towerHundredPrefab: {fileID: 114636047301806564, guid: e828cfd0629d84f4bb80ded927b00c1f,
+    type: 3}
+  towerTenPrefab: {fileID: 114380434944808446, guid: 2fb2f75f6803a42a3bb9b05bf6142bca,
+    type: 3}
+  towerOnePrefab: {fileID: 114121589310416122, guid: b366bcce7b4ff4fae9a465cc82259e41,
+    type: 3}
 --- !u!4 &1957267775
 Transform:
   m_ObjectHideFlags: 0

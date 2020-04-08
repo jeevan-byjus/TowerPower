@@ -13,31 +13,53 @@ namespace Byjus.Gamepod.TowerPower.Verticals {
 
         }
 
-        public List<ExtInput> GetVisionObjects() {
-            var numRed = Random.Range(0, 5);
-            var numBlue = Random.Range(0, 5);
+        public List<Tower> GetVisionObjects() {
+            var numHundreds = Random.Range(0, 3);
+            var numTens = Random.Range(0, 3);
+            var numOnes = Random.Range(0, 3);
 
-            var ret = new List<ExtInput>();
-            for (int i = 0; i < numBlue; i++) {
-                ret.Add(new ExtInput {
-                    type = TileType.BLUE_ROD,
+            var ret = new List<Tower>();
+
+            for (int i = 0; i < numHundreds; i++) {
+                ret.Add(new Tower {
+                    type = TowerType.HUNDRED,
                     id = i,
-                    position = GeneratePos(ret)
+                    position = GeneratePos(ret),
+                    unitSize = new Vector2Int(1, 1),
+                    unitRange = 1,
+                    damage = 100,
+                    timeBetweenShots = 3.5f,
                 });
             }
 
-            for (int i = 0; i < numRed; i++) {
-                ret.Add(new ExtInput {
-                    type = TileType.RED_CUBE,
-                    id = i + 1000,
-                    position = GeneratePos(ret)
+            for (int i = 0; i < numTens; i++) {
+                ret.Add(new Tower {
+                    type = TowerType.TEN,
+                    id = i + 100,
+                    position = GeneratePos(ret),
+                    unitSize = new Vector2Int(1, 1),
+                    unitRange = 1,
+                    damage = 10,
+                    timeBetweenShots = 2f,
+                });
+            }
+
+            for (int i = 0; i < numOnes; i++) {
+                ret.Add(new Tower {
+                    type = TowerType.ONE,
+                    id = 1000 + i,
+                    position = GeneratePos(ret),
+                    unitSize = new Vector2Int(1, 1),
+                    unitRange = 1,
+                    damage = 1,
+                    timeBetweenShots = 1.5f,
                 });
             }
 
             return ret;
         }
 
-        Vector2 GeneratePos(List<ExtInput> objs) {
+        Vector2 GeneratePos(List<Tower> objs) {
             var pos = GetRandomPos();
             while (ExistsPosition(pos, objs)) {
                 pos = GetRandomPos();
@@ -47,12 +69,12 @@ namespace Byjus.Gamepod.TowerPower.Verticals {
         }
 
         Vector2 GetRandomPos() {
-            var x = Random.Range(-3.4f, 3.4f);
-            var y = Random.Range(-4.7f, 4.7f);
+            var x = Random.Range(-14, 14);
+            var y = Random.Range(-19, 19);
             return new Vector2(x, y);
         }
 
-        bool ExistsPosition(Vector2 testPos, List<ExtInput> objs) {
+        bool ExistsPosition(Vector2 testPos, List<Tower> objs) {
             foreach (var obj in objs) { if (obj.position == testPos) { return true; } }
             return false;
         }
