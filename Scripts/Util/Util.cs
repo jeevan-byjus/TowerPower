@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Byjus.Gamepod.TowerPower.Util {
     public class Constants {
-        public const float INPUT_DELAY = 3f;
+        public const float INPUT_DELAY = 0.8f;
         public static float SW_EQUAL_POSITION_DIFF_PERCENT = 2f / 100;
         public static float SW_SAME_POINT_MOVED_DIFF_PERCENT = 30.0f / 100;
 

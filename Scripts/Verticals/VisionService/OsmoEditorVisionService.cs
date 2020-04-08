@@ -17,20 +17,43 @@ namespace Byjus.Gamepod.TowerPower.Verticals {
             this.visionHelper = visionHelper;
         }
 
-        public List<ExtInput> GetVisionObjects() {
+        public List<Tower> GetVisionObjects() {
             var aliveObjs = visionHelper.tangibleManager.AliveObjects;
 
-            var ret = new List<ExtInput>();
+            var ret = new List<Tower>();
             foreach (var obj in aliveObjs) {
-
                 var pos = GetWorldPos(new Vector2(obj.Location.X, obj.Location.Y));
 
-                if (obj.Id < 10) {
-                    for (int i = 0; i < 10; i++) {
-                        ret.Add(new ExtInput { id = obj.Id, type = TileType.BLUE_ROD, position = pos + new Vector3(i * 1, 0) });
-                    }
-                } else {
-                    ret.Add(new ExtInput { id = obj.Id, type = TileType.RED_CUBE, position = pos });
+                if (obj.Id % 3 == 0) {
+                    ret.Add(new Tower {
+                        type = TowerType.HUNDRED,
+                        id = obj.Id,
+                        position = pos,
+                        unitSize = new Vector2Int(1, 1),
+                        unitRange = 1,
+                        damage = 100,
+                        timeBetweenShots = 3.5f,
+                    });
+                } else if (obj.Id % 3 == 1) {
+                    ret.Add(new Tower {
+                        type = TowerType.TEN,
+                        id = obj.Id,
+                        position =pos ,
+                        unitSize = new Vector2Int(1, 1),
+                        unitRange = 1,
+                        damage = 10,
+                        timeBetweenShots = 2f,
+                    });
+                } else if (obj.Id % 3 == 2) {
+                    ret.Add(new Tower {
+                        type = TowerType.ONE,
+                        id = obj.Id,
+                        position = pos,
+                        unitSize = new Vector2Int(1, 1),
+                        unitRange = 1,
+                        damage = 1,
+                        timeBetweenShots = 1.5f,
+                    });
                 }
             }
             return ret;

@@ -25,13 +25,12 @@ namespace Byjus.Gamepod.TowerPower.Controllers {
             var furthest = GetFurthestTarget(targets);
 
             if (furthest == null) {
-                Debug.LogError("No targets to shoot at");
-                return;
+                Debug.LogWarning("No targets to shoot at");
+            } else {
+                view.FireBullet(furthest.GetCurrentPosition(), () => {
+                    furthest.TakeDamage(mModel.damage);
+                });
             }
-
-            view.FireBullet(furthest.GetCurrentPosition(), () => {
-                furthest.TakeDamage(mModel.damage);
-            });
 
             view.Wait(mModel.timeBetweenShots, () => {
                 Fire();
@@ -59,8 +58,8 @@ namespace Byjus.Gamepod.TowerPower.Controllers {
                 mModel.position.y - (mModel.unitSize.y / 2 + mModel.unitRange) * tileSize.y);
 
             var size = new Vector2(
-                (mModel.unitSize.x + mModel.unitRange) * tileSize.x,
-                (mModel.unitSize.y + mModel.unitRange) * tileSize.y);
+                (mModel.unitSize.x + mModel.unitRange * 2) * tileSize.x,
+                (mModel.unitSize.y + mModel.unitRange * 2) * tileSize.y);
 
             return new Rect(bottomLeft, size);
         }

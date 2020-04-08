@@ -14,9 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   DummyData: '?'
   Value:
-    GamePath: Assets/Games/container-tester-games/GamepodTemplate
+    GamePath: Assets/Games/container-tester-games/TowerPower
     UsesLocalization: 0
-    GameID: GamepodTemplate
+    GameID: TowerPower
     SectionID: gamepod
     AnalyticsID: 
     RequiredTiles: 0
@@ -26,7 +26,7 @@ MonoBehaviour:
     LocalizationURL: 
     BundleScenes: 0
     Scenes:
-    - Scenes/TemplateScene.unity
+    - Scenes/TowerPower.unity
     Settings:
       IsArcadeGame: 1
       UsesOsmoworld: 0

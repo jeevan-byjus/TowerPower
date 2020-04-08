@@ -40,21 +40,44 @@ namespace Byjus.Gamepod.TowerPower.Verticals {
             lastJson = json;
         }
 
-        public List<ExtInput> GetVisionObjects() {
+        public List<Tower> GetVisionObjects() {
             var output = JsonUtility.FromJson<JOutput>(lastJson);
 
-            var ret = new List<ExtInput>();
-            int numBlues = 0, numReds = 0;
+            var ret = new List<Tower>();
             foreach (var item in output.items) {
                 var pos = visionBoundingBox.GetScreenPoint(CameraUtil.MainDimens(), item.pt);
                 pos = PosAdjustments(pos);
 
-                if (string.Equals(item.color, "blue")) {
-                    var it = new ExtInput { id = 100 + numBlues++, type = TileType.BLUE_ROD, position = pos };
-                    ret.Add(it);
-                } else if (string.Equals(item.color, "red")) {
-                    var it = new ExtInput { id = 1000 + numReds++, type = TileType.RED_CUBE, position = pos };
-                    ret.Add(it);
+                if (item.id % 3 == 0) {
+                    ret.Add(new Tower {
+                        type = TowerType.HUNDRED,
+                        id = item.id,
+                        position = pos,
+                        unitSize = new Vector2Int(1, 1),
+                        unitRange = 1,
+                        damage = 100,
+                        timeBetweenShots = 3.5f,
+                    });
+                } else if (item.id % 3 == 1) {
+                    ret.Add(new Tower {
+                        type = TowerType.TEN,
+                        id = item.id,
+                        position = pos,
+                        unitSize = new Vector2Int(1, 1),
+                        unitRange = 1,
+                        damage = 10,
+                        timeBetweenShots = 2f,
+                    });
+                } else if (item.id % 3 == 2) {
+                    ret.Add(new Tower {
+                        type = TowerType.ONE,
+                        id = item.id,
+                        position = pos,
+                        unitSize = new Vector2Int(1, 1),
+                        unitRange = 1,
+                        damage = 1,
+                        timeBetweenShots = 1.5f,
+                    });
                 }
             }
 

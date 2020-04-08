@@ -39,6 +39,7 @@ namespace Byjus.Gamepod.TowerPower.Controllers {
 
         public void TakeDamage(float damage) {
             mModel.value -= damage;
+            Debug.LogError("Taking damage for monster: "+ mModel.id + " : " + damage + ", after damage value: " + mModel.value);
 
             if (mModel.value <= 0) {
                 parent.OnMonsterDestroyed(this);

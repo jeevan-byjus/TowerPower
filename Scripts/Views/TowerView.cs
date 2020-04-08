@@ -2,6 +2,7 @@
 using System.Collections;
 using System;
 using Byjus.Gamepod.TowerPower.Controllers;
+using DG.Tweening;
 
 namespace Byjus.Gamepod.TowerPower.Views {
     public class TowerView : BaseView, ITowerView {
@@ -11,25 +12,12 @@ namespace Byjus.Gamepod.TowerPower.Views {
 
         public void FireBullet(Vector3 toPos, Action onDone) {
             // will change to DoTween
-            StartCoroutine(FireBulletAsync(toPos, onDone));
-        }
-
-        IEnumerator FireBulletAsync(Vector3 toPos, Action onDone) {
             var bullet = Instantiate(bulletPrefab, transform);
-
-            yield return new WaitForSeconds(0.5f);
-
-            bullet.transform.position += new Vector3(toPos.x - transform.position.x / 2, toPos.y - transform.position.y / 2);
-
-            yield return new WaitForSeconds(0.5f);
-
-            bullet.transform.position = toPos;
-
-            yield return new WaitForSeconds(0.2f);
-
-            Destroy(bullet);
-
-            onDone();
+            bullet.transform.position = transform.position;
+            bullet.transform.DOMove(toPos, 0.2f).OnComplete(() => {
+                Destroy(bullet);
+                onDone();
+            });
         }
 
         public void DestroySelf() {
