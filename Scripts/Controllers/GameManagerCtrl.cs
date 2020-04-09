@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using Byjus.Gamepod.TowerPower.Views;
 using Byjus.Gamepod.TowerPower.Verticals;
+using Byjus.Gamepod.TowerPower.Util;
 using System.Collections.Generic;
 
 namespace Byjus.Gamepod.TowerPower.Controllers {
@@ -16,37 +17,40 @@ namespace Byjus.Gamepod.TowerPower.Controllers {
         List<List<CellType>> cells;
         List<IMonsterCtrl> monsterCtrls;
         List<ITowerCtrl> towerCtrls;
+        int currLife;
+        int currCoins;
 
         public void Init() {
-            startPoint = new Vector2(-13.5f, 13.5f);
-            tileSize = new Vector2(3, 3);
-            entry = WorldPos(new Vector2Int(0, 1));
-            exit = WorldPos(new Vector2Int(9, 8));
+            startPoint = new Vector2(-12.5f, 12.5f);
+            tileSize = new Vector2(5, 5);
+            entry = WorldPos(new Vector2Int(0, 0));
+            exit = WorldPos(new Vector2Int(5, 5));
 
-            string levelS = "0 0 0 0 0 0 0 0 0 0\n" +
-                "7 1 1 5 0 0 0 0 0 0\n" +
-                "0 0 0 4 1 1 1 5 0 0\n" +
-                "0 0 0 0 0 0 0 2 0 0\n" +
-                "0 0 0 0 0 0 0 2 0 0\n" +
-                "0 6 1 1 1 1 1 3 0 0\n" +
-                "0 2 0 0 0 0 0 0 0 0\n" +
-                "0 4 1 5 0 0 0 0 0 0\n" +
-                "0 0 0 4 1 1 1 1 1 8\n" +
-                "0 0 0 0 0 0 0 0 0 0";
+            string levelS =
+                "7 1 5 0 0 0\n" +
+                "0 0 4 1 5 0\n" +
+                "0 0 0 0 2 0\n" +
+                "0 6 1 1 3 0\n" +
+                "0 2 0 0 0 0\n" +
+                "0 4 1 1 1 8";
 
-            string monstersS = "1 0 125\n" +
-                "2 1 215\n" +
-                "3 1 100\n" +
-                "4 0 80\n" +
-                "5 1 400";
+            string monstersS = "1 0 500\n" +
+                "2 1 500\n" +
+                "3 1 500\n" +
+                "4 0 500\n" +
+                "5 1 500";
 
             cells = ParseLevel(levelS);
             view.DrawLevel(cells, () => { });
             gamePath = new List<Vector2>();
-            gamePath = ParsePath(cells, new Vector2Int(0, 1), new Vector2Int(9, 8));
+            gamePath = ParsePath(cells, new Vector2Int(0, 0), new Vector2Int(5, 5));
 
             towerCtrls = new List<ITowerCtrl>();
             monsterCtrls = new List<IMonsterCtrl>();
+            currLife = 3;
+            currCoins = 0;
+
+            view.UpdateCoins(currCoins);
             var monsters = ParseMonsters(monstersS);
             MonsterSpawnLoop(monsters);
         }
@@ -75,7 +79,8 @@ namespace Byjus.Gamepod.TowerPower.Controllers {
                 var m = new Monster {
                     id = int.Parse(props[0]),
                     type = (MonsterType) int.Parse(props[1]),
-                    value = int.Parse(props[2])
+                    value = int.Parse(props[2]),
+                    currHealth = int.Parse(props[2])
                 };
                 ret.Add(m);
             }
@@ -91,11 +96,12 @@ namespace Byjus.Gamepod.TowerPower.Controllers {
             var addX = new int[] { 1, 0, -1, 0 };
             var addY = new int[] { 0, 1, 0, -1 };
 
-            Vector2Int prev = new Vector2Int(-1, -1);
+            var prev = new Vector2Int(-1, -1);
+            var curr = entryPos;
+            var adjustment = new Vector2(0, Constants.MONSTER_POS_ADJUST_Y);
 
-            Vector2Int curr = entryPos;
             while (curr != exitPos) {
-                ret.Add(WorldPos(curr));
+                ret.Add(WorldPos(curr) + adjustment);
 
                 int nx = 0, ny = 0;
                 bool found = false;
@@ -116,7 +122,7 @@ namespace Byjus.Gamepod.TowerPower.Controllers {
                 }
 
                 if (!found) {
-                    throw new System.Exception("No adjacent cell found");
+                    throw new System.Exception("No adjacent cell found. CURR: " + curr + ", prev: " + prev + ", nx: " + nx + ", ny: " + ny);
                 }
             }
             ret.Add(WorldPos(exitPos));
@@ -130,7 +136,7 @@ namespace Byjus.Gamepod.TowerPower.Controllers {
 
         void MonsterSpawnLoop(List<Monster> monsters) {
             for (int i = 0; i < monsters.Count; i++) {
-                WaitAndCreateMonster(i * 2, monsters[i]);
+                WaitAndCreateMonster(i * 8, monsters[i]);
             }
         }
 
@@ -161,7 +167,16 @@ namespace Byjus.Gamepod.TowerPower.Controllers {
         }
 
         public void OnMonsterEndOfPath(IMonsterCtrl m) {
-            // reduce HP if any
+            if (currLife <= 0) {
+                Debug.LogError("No lives left for monster to finish!");
+                return;
+            }
+
+            view.ReduceLife();
+            currLife--;
+            if (currLife == 0) {
+                // end game
+            }
             DestroyMonster(m);
         }
 
@@ -250,7 +265,8 @@ namespace Byjus.Gamepod.TowerPower.Controllers {
         }
 
         public void OnMonsterDestroyed(IMonsterCtrl m) {
-            // destroyed by user, give points maybe
+            currCoins += m.Value;
+            view.UpdateCoins(currCoins);
             DestroyMonster(m);
         }
 
@@ -289,6 +305,7 @@ namespace Byjus.Gamepod.TowerPower.Controllers {
         BEND_BR,
         ENTRY,
         EXIT,
+        BLOCKED,
         TOWER
     }
 }

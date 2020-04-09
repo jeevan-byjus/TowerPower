@@ -84,7 +84,7 @@ namespace Byjus.Gamepod.TowerPower.Controllers {
     }
 
     public interface ITowerTarget {
-        void TakeDamage(float damage);
+        void TakeDamage(int damage);
         float GetDistanceCovered();
         Vector3 GetCurrentPosition();
     }

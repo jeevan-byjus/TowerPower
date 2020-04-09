@@ -8,7 +8,7 @@ namespace Byjus.Gamepod.TowerPower.Views {
             StartCoroutine(WaitFor(time, onDone));
         }
 
-        IEnumerator WaitFor(float time, Action onDone) {
+        protected IEnumerator WaitFor(float time, Action onDone) {
             yield return new WaitForSeconds(time);
 
             onDone();

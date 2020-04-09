@@ -14,6 +14,9 @@ namespace Byjus.Gamepod.TowerPower.Util {
         public static float HW_POINT_COMPARE_EPSILON = 5f;
 
         public const int POSITION_ROUND_OFF_TO_DIGITS = 4;
+
+        public const float MONSTER_POS_ADJUST_Y = 0f;
+        public const float MONSTER_DANGER_HEALTH_THRESHOLD = 0.3f;
     }
 
     public class CameraUtil {

@@ -1,7 +1,9 @@
 ﻿using UnityEngine;
 using System;
+using UnityEngine.UI;
 using System.Collections.Generic;
 using Byjus.Gamepod.TowerPower.Verticals;
+using Byjus.Gamepod.TowerPower.Util;
 using Byjus.Gamepod.TowerPower.Controllers;
 
 namespace Byjus.Gamepod.TowerPower.Views {
@@ -19,10 +21,16 @@ namespace Byjus.Gamepod.TowerPower.Views {
         [SerializeField] TowerView towerTenPrefab;
         [SerializeField] TowerView towerOnePrefab;
 
+        [SerializeField] List<GameObject> lives;
+        [SerializeField] Text coinText;
+
         public void CreateMonster(Monster m, Action<MonsterView> onDone) {
             var mV = Instantiate(m.type == MonsterType.TYPE_A ? monsterPrefabA : monsterPrefabB);
-            mV.transform.position = ctrl.entry;
-            onDone(mV);
+            mV.transform.position = ctrl.entry + new Vector2(0, Constants.MONSTER_POS_ADJUST_Y);
+
+            StartCoroutine(WaitFor(0.5f, () => {
+                onDone(mV);
+            }));
         }
 
         public void DrawLevel(List<List<CellType>> cells, Action onDone) {
@@ -68,11 +76,22 @@ namespace Byjus.Gamepod.TowerPower.Views {
 
             onDone(tV);
         }
+
+        public void ReduceLife() {
+            Destroy(lives[lives.Count - 1]);
+            lives.RemoveAt(lives.Count - 1);
+        }
+
+        public void UpdateCoins(int coins) {
+            coinText.text = coins + "";
+        }
     }
 
     public interface IGameManagerView : IBaseView {
         void DrawLevel(List<List<CellType>> cells, Action onDone);
         void CreateMonster(Monster m, Action<MonsterView> onDone);
         void CreateTower(Tower t, Action<TowerView> onDone);
+        void ReduceLife();
+        void UpdateCoins(int coins);
     }
 }

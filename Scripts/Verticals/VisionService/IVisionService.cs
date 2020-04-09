@@ -22,7 +22,7 @@ namespace Byjus.Gamepod.TowerPower.Verticals {
         public Vector2Int unitSize;
         public int unitRange;
         public float timeBetweenShots;
-        public float damage;
+        public int damage;
 
         public Tower() {
 

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Byjus.Gamepod.TowerPower.Views;
+using Byjus.Gamepod.TowerPower.Util;
 using UnityEngine;
 
 namespace Byjus.Gamepod.TowerPower.Controllers {
@@ -11,11 +12,14 @@ namespace Byjus.Gamepod.TowerPower.Controllers {
         List<Vector2> mPath;
         int currPathInd;
 
+        public int Value { get { return mModel.value; } }
+
         public void Init(Monster mModel, List<Vector2> path) {
             this.mModel = mModel;
             this.mPath = path;
 
-            currPathInd = 0;
+            view.UpdateHealth(1, false);
+            currPathInd = 1;
             MoveOnPath();
         }
 
@@ -30,18 +34,19 @@ namespace Byjus.Gamepod.TowerPower.Controllers {
             }
 
             view.MoveTo(mPath[currPathInd], () => {
-                view.Wait(2.0f, () => {
-                    currPathInd++;
-                    MoveOnPath();
-                });
+                currPathInd++;
+                MoveOnPath();
+
             });
         }
 
-        public void TakeDamage(float damage) {
-            mModel.value -= damage;
-            Debug.LogError("Taking damage for monster: "+ mModel.id + " : " + damage + ", after damage value: " + mModel.value);
+        public void TakeDamage(int damage) {
+            mModel.currHealth -= damage;
+            Debug.LogError("Taking damage: " + damage + ", curHealth: " + mModel.currHealth);
+            var dPercent = Mathf.Clamp01(mModel.currHealth / mModel.value);
+            view.UpdateHealth(dPercent, dPercent < Constants.MONSTER_DANGER_HEALTH_THRESHOLD);
 
-            if (mModel.value <= 0) {
+            if (mModel.currHealth <= 0) {
                 parent.OnMonsterDestroyed(this);
             }
         }
@@ -60,6 +65,7 @@ namespace Byjus.Gamepod.TowerPower.Controllers {
 
     public interface IMonsterCtrl {
         void Init(Monster mModel, List<Vector2> path);
+        int Value { get; }
         void Destroy();
     }
 
@@ -71,7 +77,9 @@ namespace Byjus.Gamepod.TowerPower.Controllers {
     public class Monster {
         public int id;
         public MonsterType type;
-        public float value;
+        public int value;
+
+        public int currHealth;
     }
 
     public enum MonsterType {
