@@ -1,12 +1,6 @@
 {
     "name": "TowerPower-Scripts",
-    "references": [
-        "sdk-plugins",
-        "container-api",
-        "gamehelper-scripts",
-        "gamehelper-tweening",
-        "gamehelper-editor"
-    ],
+    "references": [],
     "optionalUnityReferences": [],
     "includePlatforms": [],
     "excludePlatforms": [],

@@ -14,10 +14,15 @@ namespace Byjus.Gamepod.TowerPower.Controllers {
         public TowerType Type => mModel.type;
         public Vector2Int UnitSize => mModel.unitSize;
         public Vector2Int UnitPostion => mModel.unitPosition;
+        public bool Valid => mModel.valid;
 
         public void Init(Tower mModel) {
             this.mModel = mModel;
-            Fire();
+            view.MarkValidity(mModel.valid);
+
+            if (mModel.valid) {
+                Fire();
+            }
         }
 
         void Fire() {
@@ -75,6 +80,7 @@ namespace Byjus.Gamepod.TowerPower.Controllers {
         TowerType Type { get; }
         Vector2Int UnitSize { get; }
         Vector2Int UnitPostion { get; }
+        bool Valid { get; }
         Rect GetRange(Vector2 tileSize);
         void DestroySelf();
     }

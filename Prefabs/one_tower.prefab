@@ -94,3 +94,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   bulletPrefab: {fileID: 66146188099404388, guid: a4515cc1abbfb48d49cb51bac5cb19c5,
     type: 3}
+  towerSprite: {fileID: 1514907519079824604}
+  invalidColor: {r: 1, g: 0, b: 0, a: 1}
+  validColor: {r: 1, g: 1, b: 1, a: 1}

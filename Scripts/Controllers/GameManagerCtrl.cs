@@ -195,18 +195,18 @@ namespace Byjus.Gamepod.TowerPower.Controllers {
 
         public void OnTowerAdded(Tower t) {
             t.unitPosition = GetCellPosForTower(t);
-            if (!ValidateTower(t)) {
-                Debug.LogError("Invalid tower placement");
-                return;
-            }
-
             t.position = startPoint + new Vector2(t.unitPosition.x * tileSize.x, -t.unitPosition.y * tileSize.y);
-            MarkTowerInCells(t.unitSize, t.unitPosition, true);
 
             view.CreateTower(t, tv => {
+                t.valid = ValidateTower(t);
+
                 var ctrl = CreateTowerCtrl(tv);
                 ctrl.Init(t);
                 towerCtrls.Add(ctrl);
+
+                if (t.valid) {
+                    MarkTowerInCells(t.unitSize, t.unitPosition, true);
+                }
             });
         }
 
@@ -255,7 +255,10 @@ namespace Byjus.Gamepod.TowerPower.Controllers {
                 return;
             }
 
-            MarkTowerInCells(tower.UnitSize, tower.UnitPostion, false);
+            if (tower.Valid) {
+                MarkTowerInCells(tower.UnitSize, tower.UnitPostion, false);
+            }
+
             tower.DestroySelf();
             towerCtrls.Remove(tower);
         }

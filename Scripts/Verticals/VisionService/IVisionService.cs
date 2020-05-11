@@ -23,6 +23,7 @@ namespace Byjus.Gamepod.TowerPower.Verticals {
         public int unitRange;
         public float timeBetweenShots;
         public int damage;
+        public bool valid;
 
         public Tower() {
 
@@ -36,6 +37,7 @@ namespace Byjus.Gamepod.TowerPower.Verticals {
             unitRange = other.unitRange;
             timeBetweenShots = other.timeBetweenShots;
             damage = other.damage;
+            valid = other.valid;
         }
 
         public override string ToString() {
@@ -45,7 +47,8 @@ namespace Byjus.Gamepod.TowerPower.Verticals {
                 "Size: " + unitSize + "\n" +
                 "Range: " + unitRange + "\n" +
                 "Time: " + timeBetweenShots + "\n" +
-                "Damage: " + damage + "\n";
+                "Damage: " + damage + "\n" +
+                "Valid: " + valid + "\n";
         }
     }
 }

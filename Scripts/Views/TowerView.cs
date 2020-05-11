@@ -9,6 +9,9 @@ namespace Byjus.Gamepod.TowerPower.Views {
         public ITowerCtrl ctrl;
 
         [SerializeField] GameObject bulletPrefab;
+        [SerializeField] SpriteRenderer towerSprite;
+        [SerializeField] Color invalidColor;
+        [SerializeField] Color validColor;
 
         public void FireBullet(Vector3 toPos, Action onDone) {
             // will change to DoTween
@@ -20,6 +23,10 @@ namespace Byjus.Gamepod.TowerPower.Views {
             });
         }
 
+        public void MarkValidity(bool validity) {
+            towerSprite.color = validity ? validColor : invalidColor;
+        }
+
         public void DestroySelf() {
             Destroy(gameObject);
         }
@@ -27,6 +34,7 @@ namespace Byjus.Gamepod.TowerPower.Views {
 
     public interface ITowerView : IBaseView {
         void FireBullet(Vector3 toPos, Action onDone);
+        void MarkValidity(bool validity);
         void DestroySelf();
     }
 }
