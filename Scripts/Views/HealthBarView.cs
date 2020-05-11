@@ -13,9 +13,9 @@ namespace Byjus.Gamepod.TowerPower.Views {
             var newSize = healthPercent * bg.size.x;
             var diff = newSize - health.size.x;
 
-            Debug.LogError("newSize: " + newSize + ", diff: " + diff);
+            Debug.LogError("health percent: " + healthPercent + ", newSize: " + newSize + ", diff: " + diff);
 
-            health.size += new Vector2(diff, 0);
+            health.size = new Vector2(newSize, health.size.y);
             health.transform.position += new Vector3(diff / 2, 0);
             health.color = showDanger ? dangerHealthColor : okHealthColor;
         }

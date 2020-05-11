@@ -12,7 +12,7 @@ namespace Byjus.Gamepod.TowerPower.Controllers {
         List<Vector2> mPath;
         int currPathInd;
 
-        public int Value { get { return mModel.value; } }
+        public int Value { get { return mModel.maxHealth; } }
 
         public void Init(Monster mModel, List<Vector2> path) {
             this.mModel = mModel;
@@ -42,8 +42,8 @@ namespace Byjus.Gamepod.TowerPower.Controllers {
 
         public void TakeDamage(int damage) {
             mModel.currHealth -= damage;
-            Debug.LogError("Taking damage: " + damage + ", curHealth: " + mModel.currHealth);
-            var dPercent = Mathf.Clamp01(mModel.currHealth / mModel.value);
+            var dPercent = Mathf.Clamp01((float) mModel.currHealth / mModel.maxHealth);
+            Debug.LogError("Taking damage: " + damage + ", curHealth: " + mModel.currHealth + ", percent: " + dPercent);
             view.UpdateHealth(dPercent, dPercent < Constants.MONSTER_DANGER_HEALTH_THRESHOLD);
 
             if (mModel.currHealth <= 0) {
@@ -77,7 +77,7 @@ namespace Byjus.Gamepod.TowerPower.Controllers {
     public class Monster {
         public int id;
         public MonsterType type;
-        public int value;
+        public int maxHealth;
 
         public int currHealth;
     }

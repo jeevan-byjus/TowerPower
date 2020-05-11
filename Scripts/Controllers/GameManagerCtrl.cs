@@ -34,10 +34,10 @@ namespace Byjus.Gamepod.TowerPower.Controllers {
                 "0 2 0 0 0 0\n" +
                 "0 4 1 1 1 8";
 
-            string monstersS = "1 0 500\n" +
-                "2 1 500\n" +
-                "3 1 500\n" +
-                "4 0 500\n" +
+            string monstersS = "1 0 154\n" +
+                "2 1 250\n" +
+                "3 1 123\n" +
+                "4 0 290\n" +
                 "5 1 500";
 
             cells = ParseLevel(levelS);
@@ -79,7 +79,7 @@ namespace Byjus.Gamepod.TowerPower.Controllers {
                 var m = new Monster {
                     id = int.Parse(props[0]),
                     type = (MonsterType) int.Parse(props[1]),
-                    value = int.Parse(props[2]),
+                    maxHealth = int.Parse(props[2]),
                     currHealth = int.Parse(props[2])
                 };
                 ret.Add(m);
